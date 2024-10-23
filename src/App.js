@@ -11,7 +11,7 @@ function FormComponent() {
   const items = useSelector((state) => state.items.items);
   const dispatch = useDispatch();
   const navigate = useNavigate(); // Used for programmatic navigation
-  
+
   const [purchaseDate, setPurchaseDate] = useState(new Date().toISOString().split('T')[0]);
   const [sgst, setSGST] = useState(0);
   const [cgst, setCGST] = useState(0);
@@ -32,12 +32,12 @@ function FormComponent() {
       sgst,
       cgst,
     };
-    
+
     try {
       // Add a new document in Firestore
       await addDoc(collection(db, "receipts"), receipt);
       alert("Receipt submitted successfully!");
-      
+
       // Programmatically navigate to the "View Receipts" page after submission
       navigate("/receipts");
     } catch (e) {
@@ -77,6 +77,13 @@ function FormComponent() {
 
   return (
     <div className="container">
+      {/* View Receipts Button */}
+      <div className="top-right">
+        <button className="view-receipts-button" onClick={() => navigate("/receipts")}>
+          View Receipts
+        </button>
+      </div>
+
       {/* Brand Details Section */}
       <div className="section-box">
         <div className="brand-row">
@@ -84,11 +91,11 @@ function FormComponent() {
             <p>बेर्डेकर काजू उद्योग, खरवते फाटा<br />राजापुर, रत्नागिरी, ४१६७०५<br />मोबाइल नो. ९८५०४४५०९०, ८६००४३९९९९</p>
           </div>
           <div className="brand-center">
-            <img src="company_logo.png" alt="Brand Logo" className="brand-logo" />
+            <img src={`${process.env.PUBLIC_URL}/company_logo.png`} alt="Brand Logo" className="brand-logo" />
             <h3>बेर्डेकर काजु उदयोग</h3>
           </div>
           <div className="brand-right">
-          <p>GST क्रमांक: 27ABDPB9946Q1ZZ<br />फूड लायसन्स क्रमांक: 30230821114211158</p>
+            <p>GST क्रमांक: 27ABDPB9946Q1ZZ<br />फूड लायसन्स क्रमांक: 30230821114211158</p>
           </div>
         </div>
       </div>
