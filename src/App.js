@@ -51,7 +51,7 @@ function App() {
             <h3>बेर्डेकर काजु उदयोग</h3>
           </div>
           <div className="brand-right">
-            <p>GST क्रमांक: ABC123XYZ<br />फूड लायसन्स क्रमांक: 123</p>
+            <p>GST क्रमांक: 27ABDPB9946Q1ZZ<br />फूड लायसन्स क्रमांक: 30230821114211158</p>
           </div>
         </div>
       </div>
