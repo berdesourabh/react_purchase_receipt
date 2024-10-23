@@ -87,7 +87,21 @@ function App() {
             </div>
             <div className="form-item">
               <label>वस्तूचे नाव</label>
-              <input type="text" value={item.itemName} onChange={(e) => handleInputChange(item.id, 'itemName', e.target.value)} />
+              <select value={item.itemName} onChange={(e) => handleInputChange(item.id, 'itemName', e.target.value)}>
+                <option value="">निवडा</option>
+                <option value="W180 काजु">W180 काजु</option>
+                <option value="W210 काजु">W210 काजु</option>
+                <option value="W240 काजु">W240 काजु</option>
+                <option value="W320 काजु">W320 काजु</option>
+                <option value="W400 काजु">W400 काजु</option>
+                <option value="मोठी पूर्ण पकळी">मोठी पूर्ण पकळी</option>
+                <option value="लहान पूर्ण पकळी">लहान पूर्ण पकळी</option>
+                <option value="मोठा पकळी तुकडा">मोठा पकळी तुकडा</option>
+                <option value="लहान पकळी तुकडा">लहान पकळी तुकडा</option>
+                <option value="बारीक पकळी तुकडा">बारीक पकळी तुकडा</option>
+                <option value="मोठा काजु तुकडा">मोठा काजु तुकडा</option>
+                <option value="लहान काजु तुकडा">लहान काजु तुकडा</option>
+              </select>
             </div>
             <div className="form-item">
               <label>वजन (किलो)</label>

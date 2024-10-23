@@ -97,6 +97,17 @@ body {
   flex: 1;
 }
 
+/* Styling for the select dropdown */
+.form-item select {
+  padding: 10px;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 14px;
+}
+
+/* General input field styling */
 .item-row .form-item input {
   padding: 10px;
   width: 100%;
