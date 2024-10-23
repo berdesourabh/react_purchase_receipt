@@ -2,15 +2,49 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { addItem, removeItem, updateItem, resetItems } from './redux/itemSlice';
 import './App.css';
+import { db } from './firebaseConfig'; // Firebase configuration
+import { collection, addDoc } from "firebase/firestore"; // Firestore methods
+import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom'; // React Router v6
+import ReceiptList from './components/ReceiptList'; // Component for viewing receipts
 
-function App() {
+function FormComponent() {
   const items = useSelector((state) => state.items.items);
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // Used for programmatic navigation
   
   const [purchaseDate, setPurchaseDate] = useState(new Date().toISOString().split('T')[0]);
   const [sgst, setSGST] = useState(0);
   const [cgst, setCGST] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
+  const [customerName, setCustomerName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [customerGST, setCustomerGST] = useState('');
+
+  // Function to save receipt to Firestore
+  const handleSubmit = async () => {
+    const receipt = {
+      customerName,
+      phoneNumber,
+      customerGST,
+      purchaseDate,
+      items,
+      totalAmount,
+      sgst,
+      cgst,
+    };
+    
+    try {
+      // Add a new document in Firestore
+      await addDoc(collection(db, "receipts"), receipt);
+      alert("Receipt submitted successfully!");
+      
+      // Programmatically navigate to the "View Receipts" page after submission
+      navigate("/receipts");
+    } catch (e) {
+      console.error("Error adding document: ", e);
+      alert("Failed to submit receipt. Please try again.");
+    }
+  };
 
   const handleInputChange = (id, field, value) => {
     dispatch(updateItem({ id, field, value }));
@@ -36,6 +70,9 @@ function App() {
     setSGST(0);
     setCGST(0);
     setTotalAmount(0);
+    setCustomerName('');
+    setPhoneNumber('');
+    setCustomerGST('');
   };
 
   return (
@@ -51,7 +88,7 @@ function App() {
             <h3>बेर्डेकर काजु उदयोग</h3>
           </div>
           <div className="brand-right">
-            <p>GST क्रमांक: 27ABDPB9946Q1ZZ<br />फूड लायसन्स क्रमांक: 30230821114211158</p>
+            <p>GST क्रमांक: ABC123XYZ<br />फूड लायसन्स क्रमांक: 123</p>
           </div>
         </div>
       </div>
@@ -61,11 +98,11 @@ function App() {
         <div className="customer-details-row">
           <div className="form-group">
             <label>ग्राहकाचे नाव</label>
-            <input type="text" />
+            <input type="text" value={customerName} onChange={(e) => setCustomerName(e.target.value)} />
           </div>
           <div className="form-group">
             <label>फोन नंबर</label>
-            <input type="tel" />
+            <input type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
           </div>
           <div className="form-group">
             <label>खरेदी दिनांक</label>
@@ -73,7 +110,7 @@ function App() {
           </div>
           <div className="form-group">
             <label>ग्राहकाचे GST क्रमांक</label>
-            <input type="text" />
+            <input type="text" value={customerGST} onChange={(e) => setCustomerGST(e.target.value)} />
           </div>
         </div>
       </div>
@@ -148,12 +185,26 @@ function App() {
         </div>
       </div>
 
-      {/* Print and Reset Buttons */}
+      {/* Print, Submit, and Reset Buttons */}
       <div className="button-group">
         <button onClick={() => window.print()}>प्रिंट करा</button>
+        <button className="submit-receipt" type="button" onClick={handleSubmit}>सबमिट करा</button>
         <button type="reset" onClick={handleReset}>रीसेट करा</button>
       </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <div>
+        <Routes>
+          <Route path="/" element={<FormComponent />} />
+          <Route path="/receipts" element={<ReceiptList />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

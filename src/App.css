@@ -11,7 +11,7 @@ body {
 
 .container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 900px;
   margin: 0 auto;
   background-color: white;
   padding: 20px;
@@ -28,150 +28,105 @@ body {
   background-color: #f9f9f9;
 }
 
-/* Brand Details Row */
-.brand-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* Form Inputs */
+.form-group, .form-item {
+  margin-bottom: 15px;
 }
 
-.brand-left,
-.brand-right {
-  flex: 1;
+.form-group label, .form-item label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input, .form-item input, .form-item select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
   font-size: 14px;
 }
 
-.brand-center {
-  flex: 2;
-  text-align: center;
+.form-item select {
+  appearance: none; /* Hide the default dropdown arrow */
+  background-color: white;
 }
 
-.brand-logo {
-  width: 100px;
-}
-
-/* Customer Details Section */
 .customer-details-row {
   display: flex;
   justify-content: space-between;
   gap: 20px;
 }
 
-.form-group {
+.customer-details-row .form-group {
   flex: 1;
-  margin-bottom: 15px;
 }
 
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-/* Item Number Styling */
-.item-number {
-  font-weight: bold;
-  font-size: 16px;
-  margin-right: 10px;
-}
-
-/* Item Row Styling */
+/* Items Section */
 .item-row {
   display: flex;
-  align-items: center;
   justify-content: space-between;
   gap: 15px;
   margin-bottom: 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid #ddd;
 }
 
-.item-row .form-item {
+.form-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   flex: 1;
 }
 
-/* Styling for the select dropdown */
-.form-item select {
-  padding: 10px;
-  width: 100%;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: white;
-  font-size: 14px;
-}
-
-/* General input field styling */
-.item-row .form-item input {
-  padding: 10px;
-  width: 100%;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.item-row button {
-  background-color: red;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  align-self: flex-start;
-}
-
-/* Purchase Details Section Inline */
-.purchase-row {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.purchase-row .form-item {
-  display: flex;
-  align-items: center;
-  flex: 1;
-}
-
-.purchase-row .form-item label {
-  margin-right: 10px;
+.form-item label {
   flex-shrink: 0;
 }
 
-.purchase-row .form-item input {
-  padding: 10px;
-  border: 1px solid #ddd;
+.form-item input, .form-item select {
+  flex-grow: 1;
+  padding: 5px;
+  border: 1px solid #ccc;
   border-radius: 4px;
-  width: 100%;
 }
 
-/* Ensure button in Purchase Details is not touching SGST field */
-.purchase-details-button {
+/* Brand Section */
+.brand-row {
   display: flex;
-  justify-content: center;
-  margin-top: 15px; /* Adds spacing above the button */
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* Button Group Center Alignment */
-.button-group,
-.purchase-details-button,
-.item-button-center {
+.brand-left {
+  text-align: left;
+}
+
+.brand-center {
+  text-align: center;
+}
+
+.brand-right {
+  text-align: right;
+}
+
+.brand-logo {
+  width: 100px;
+  height: auto;
+}
+
+/* Purchase Row */
+.purchase-row {
   display: flex;
-  justify-content: center; /* Aligns buttons in the center */
-  gap: 15px; /* Adds space between buttons if there are multiple */
+  justify-content: space-between;
+  gap: 20px;
 }
 
+/* Button Styles */
 button {
   padding: 10px 20px;
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 4px;
+  font-size: 14px;
   cursor: pointer;
 }
 
@@ -180,20 +135,35 @@ button:hover {
 }
 
 button[type="reset"] {
-  background-color: #dc3545;
+  background-color: #f44336;
 }
 
 button[type="reset"]:hover {
-  background-color: #c82333;
+  background-color: #c0392b;
 }
 
-/* Print Styling */
-@media print {
-  body {
-    font-size: 12px;
-  }
+/* Print, Submit, Reset Button Group */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
 
-  button {
-    display: none;
-  }
+/* Smaller Print Button */
+button#printButton {
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+button.submit-receipt {
+  background-color: #28a745;
+}
+
+button.submit-receipt:hover {
+  background-color: #218838;
+}
+
+.item-button-center {
+  text-align: center;
+  margin-top: 10px;
 }
