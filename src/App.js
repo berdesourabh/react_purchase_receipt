@@ -4,7 +4,7 @@ import { addItem, removeItem, updateItem, resetItems } from './redux/itemSlice';
 import './App.css';
 import { db } from './firebaseConfig'; // Firebase configuration
 import { collection, addDoc } from "firebase/firestore"; // Firestore methods
-import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom'; // React Router v6
+import { HashRouter as Router, Route, Routes, useNavigate } from 'react-router-dom'; // React Router v6
 import ReceiptList from './components/ReceiptList'; // Component for viewing receipts
 
 function FormComponent() {
@@ -132,7 +132,7 @@ function FormComponent() {
             <div className="form-item">
               <label>वस्तूचे नाव</label>
               <select value={item.itemName} onChange={(e) => handleInputChange(item.id, 'itemName', e.target.value)}>
-                <option value="">निवडा</option>
+                <option value=""></option>
                 <option value="W180 काजु">W180 काजु</option>
                 <option value="W210 काजु">W210 काजु</option>
                 <option value="W240 काजु">W240 काजु</option>
