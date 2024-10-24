@@ -6,6 +6,7 @@ import { db } from './firebaseConfig'; // Firebase configuration
 import { collection, addDoc } from "firebase/firestore"; // Firestore methods
 import { HashRouter as Router, Route, Routes, useNavigate } from 'react-router-dom'; // React Router v6
 import ReceiptList from './components/ReceiptList'; // Component for viewing receipts
+import { Button } from '@mui/material';
 
 function FormComponent() {
   const items = useSelector((state) => state.items.items);
@@ -77,11 +78,10 @@ function FormComponent() {
 
   return (
     <div className="container">
-      {/* View Receipts Button */}
       <div className="top-right">
-        <button className="view-receipts-button" onClick={() => navigate("/receipts")}>
-          View Receipts
-        </button>
+        <Button className="view-receipts-button" variant='contained' color='inherit' onClick={() => navigate("/receipts")}>
+          पावत्यांची यादी
+        </Button>
       </div>
 
       {/* Brand Details Section */}
@@ -163,11 +163,11 @@ function FormComponent() {
               <label>ऑफर किंमत</label>
               <input type="number" value={item.offeredPrice} onChange={(e) => handleInputChange(item.id, 'offeredPrice', e.target.value)} />
             </div>
-            <button onClick={() => dispatch(removeItem(item.id))}>❌</button>
+            <Button onClick={() => dispatch(removeItem(item.id))}>❌</Button>
           </div>
         ))}
         <div className="item-button-center">
-          <button onClick={() => dispatch(addItem())}>आणखी एक वस्तू जोडा</button>
+          <Button variant='contained' onClick={() => dispatch(addItem())}>आणखी एक वस्तू जोडा</Button>
         </div>
       </div>
 
@@ -187,16 +187,16 @@ function FormComponent() {
             <input type="number" value={totalAmount} readOnly />
           </div>
         </div>
-        <div className="purchase-details-button">
-          <button onClick={handleCalculateTotal}>एकूण रक्कम मोजा</button>
+        <div className="item-button-center">
+          <Button onClick={handleCalculateTotal}>एकूण रक्कम मोजा</Button>
         </div>
       </div>
 
       {/* Print, Submit, and Reset Buttons */}
       <div className="button-group">
-        <button onClick={() => window.print()}>प्रिंट करा</button>
-        <button className="submit-receipt" type="button" onClick={handleSubmit}>सबमिट करा</button>
-        <button type="reset" onClick={handleReset}>रीसेट करा</button>
+        <Button variant='contained' color='warning' onClick={() => window.print()}>प्रिंट करा</Button>
+        <Button variant='contained' color='success' onClick={handleSubmit}>सबमिट करा</Button>
+        <Button variant='contained' color='error' type="reset" onClick={handleReset}>रीसेट करा</Button>
       </div>
     </div>
   );

@@ -9,6 +9,13 @@
     border-radius: 8px;
 }
 
+/* Flex container for buttons */
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
 /* Title for the receipt list */
 .receipt-list-title {
     text-align: center;
@@ -40,20 +47,6 @@
     text-align: center;
 }
 
-/* Center-align the buttons */
-button {
-    padding: 5px 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
 /* Styling for detailed receipt view */
 .receipt-details {
     margin-top: 20px;
@@ -76,4 +69,15 @@ button:hover {
 .receipt-details .item-row strong {
     display: inline-block;
     min-width: 150px;
+}
+
+/* Export to Excel button custom style */
+.export-excel-button {
+    background-color: lightgrey;
+    color: black;
+}
+
+.export-excel-button:hover {
+    background-color: grey;
+    color: white;
 }

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { db } from '../firebaseConfig'
+import { db } from '../firebaseConfig';
 import { collection, getDocs, doc, getDoc, query, orderBy } from "firebase/firestore";
 import { Typography, Box, Button, TextField, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
-import { useNavigate } from 'react-router-dom'; // For navigation
-import './ReceiptList.css'; // Import the external CSS file
+import { useNavigate } from 'react-router-dom';
+import * as XLSX from 'xlsx'; // Import xlsx for Excel export
+import './ReceiptList.css';
 
 function ReceiptList() {
   const [receipts, setReceipts] = useState([]);
@@ -54,55 +55,74 @@ function ReceiptList() {
     setFilteredReceipts(filtered);
   };
 
+  // Function to export receipts data to Excel excluding the 'id' field and including date in the filename
+  const exportToExcel = () => {
+    const filteredData = receipts.map(({ id, ...rest }) => rest); // Exclude the 'id' field
+    const worksheet = XLSX.utils.json_to_sheet(filteredData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Receipts");
+    const now = new Date();
+    const formattedDate = now.toLocaleDateString().replace(/\//g, '-');
+    const formattedTime = now.toLocaleTimeString().replace(/:/g, '-');
+    const fileName = `receipts_data_${formattedDate}_${formattedTime}.xlsx`;
+
+    XLSX.writeFile(workbook, fileName);
+  };
+
   return (
     <Box className="receipt-list-container">
-      {/* Back Button */}
-      <Button onClick={() => navigate("/")} variant="outlined" sx={{ marginBottom: '20px' }}>
-        Back
-      </Button>
+      <div className="button-container">
+        <Button onClick={() => navigate("/")} variant="contained">
+          Back
+        </Button>
+
+        <Button variant="contained" onClick={exportToExcel} className="export-excel-button">
+          Export to excel
+        </Button>
+      </div>
 
       <Typography variant="h4" className="receipt-list-title" gutterBottom>
-        Receipts List
+        पावत्यांची यादी
       </Typography>
 
       {/* Search Fields */}
       <Box sx={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
         <TextField
-          label="Search by Customer Name"
+          label="ग्राहकाचे नाव शोधा"
           variant="outlined"
           value={searchName}
           onChange={(e) => setSearchName(e.target.value)}
         />
         <TextField
-          label="Search by Purchase Date"
+          label="खरेदी दिनांक शोधा"
           type="date"
           variant="outlined"
           InputLabelProps={{ shrink: true }}
           value={searchDate}
           onChange={(e) => setSearchDate(e.target.value)}
         />
-        <Button variant="contained" onClick={handleFilter}>
+        <Button variant="contained" size="small" onClick={handleFilter}>
           Search
         </Button>
       </Box>
 
       {filteredReceipts.length === 0 ? (
         <Typography variant="body1" align="center">
-          No receipts available
+          पावत्या उपलब्ध नाहीत
         </Typography>
       ) : (
         <div>
           {/* Column headers */}
           <div className="receipt-grid-header">
-            <span>Customer Name</span>
-            <span>Phone Number</span>
-            <span>Purchase Date</span>
+            <span>ग्राहकाचे नाव</span>
+            <span>फोन नंबर</span>
+            <span>खरेदी दिनांक</span>
             <span>SGST</span>
             <span>CGST</span>
-            <span>Total Amount</span>
+            <span>एकूण रक्कम</span>
             <span></span> {/* Empty title for View Details */}
           </div>
-          
+
           {/* Filtered Receipt rows */}
           {filteredReceipts.map(receipt => (
             <div key={receipt.id} className="receipt-grid-row">
@@ -114,7 +134,7 @@ function ReceiptList() {
               <span>{receipt.totalAmount}</span>
               <span>
                 <Button variant="contained" onClick={() => handleViewDetails(receipt.id)}>
-                  View Details
+                  Details
                 </Button>
               </span>
             </div>
@@ -125,28 +145,28 @@ function ReceiptList() {
       {/* Dialog for Viewing Receipt Details */}
       {selectedReceipt && (
         <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
-          <DialogTitle>Receipt Details</DialogTitle>
+          <DialogTitle>पावती तपशील</DialogTitle>
           <DialogContent>
-            <Typography variant="body1"><strong>Customer Name:</strong> {selectedReceipt.customerName}</Typography>
-            <Typography variant="body1"><strong>Phone Number:</strong> {selectedReceipt.phoneNumber}</Typography>
-            <Typography variant="body1"><strong>Customer GST:</strong> {selectedReceipt.customerGST}</Typography>
-            <Typography variant="body1"><strong>Purchase Date:</strong> {selectedReceipt.purchaseDate}</Typography>
+            <Typography variant="body1"><strong>ग्राहकाचे नाव:</strong> {selectedReceipt.customerName}</Typography>
+            <Typography variant="body1"><strong>फोन नंबर:</strong> {selectedReceipt.phoneNumber}</Typography>
+            <Typography variant="body1"><strong>ग्राहकाचे GST:</strong> {selectedReceipt.customerGST}</Typography>
+            <Typography variant="body1"><strong>खरेदी दिनांक:</strong> {selectedReceipt.purchaseDate}</Typography>
             <Typography variant="body1"><strong>SGST:</strong> {selectedReceipt.sgst}</Typography>
             <Typography variant="body1"><strong>CGST:</strong> {selectedReceipt.cgst}</Typography>
-            <Typography variant="body1"><strong>Total Amount:</strong> {selectedReceipt.totalAmount}</Typography>
+            <Typography variant="body1"><strong>एकूण रक्कम:</strong> {selectedReceipt.totalAmount}</Typography>
 
             {/* Display Items */}
-            <Typography variant="h6" sx={{ marginTop: '20px' }}>Items Purchased</Typography>
+            <Typography variant="h6" sx={{ marginTop: '20px' }}>खरेदी केलेल्या वस्तू</Typography>
             {selectedReceipt.items.map((item, index) => (
               <Box key={index} sx={{ marginTop: '10px', paddingLeft: '20px' }}>
-                <Typography variant="body2"><strong>Item Name:</strong> {item.itemName}</Typography>
-                <Typography variant="body2"><strong>Quantity:</strong> {item.quantity}</Typography>
-                <Typography variant="body2"><strong>Offered Price:</strong> ₹{item.offeredPrice}</Typography>
+                <Typography variant="body2"><strong>वस्तूचे नाव:</strong> {item.itemName}</Typography>
+                <Typography variant="body2"><strong>प्रमाण:</strong> {item.quantity}</Typography>
+                <Typography variant="body2"><strong>ऑफर किंमत:</strong> ₹{item.offeredPrice}</Typography>
               </Box>
             ))}
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseDialog} variant="contained">Close</Button>
+            <Button onClick={handleCloseDialog} variant="contained">बंद करा</Button>
           </DialogActions>
         </Dialog>
       )}
